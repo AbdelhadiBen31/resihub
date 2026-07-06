@@ -421,11 +421,44 @@ const QUESTIONS = [
  {id:'h2',s:'hemato',d:2,q:"Quel bilan explore en première intention une anémie ?",o:["Numération + réticulocytes","D-dimères","Troponine","Lipase"],a:0,e:"NFS et réticulocytes orientent entre anémie régénérative et arégénérative."},
 ];
 
-// Banque personnalisée (contributions), fusionnée avec la démo et jouable partout.
+// Contenu amorcé : QCM originaux tirés de sources d'autorité en accès libre (OMS), source citée,
+// statut « brouillon » tant qu'un médecin ne les a pas validés.
+const SEED=[
+ {id:'s1',s:'cardio',d:1,status:'draft',src:'OMS — Maladies cardiovasculaires',q:"Quelle est la première cause de décès dans le monde selon l'OMS ?",o:["Les cancers","Les maladies cardiovasculaires","Les maladies infectieuses","Les accidents"],a:1,e:"Les maladies cardiovasculaires sont la 1re cause de mortalité mondiale (~32 % des décès en 2022)."},
+ {id:'s2',s:'cardio',d:2,status:'draft',src:'OMS — Hypertension',q:"À partir de quelle valeur, confirmée sur deux jours différents, l'OMS définit-elle l'hypertension ?",o:["120/80 mmHg","130/85 mmHg","140/90 mmHg","160/100 mmHg"],a:2,e:"L'hypertension est définie par une pression artérielle ≥ 140/90 mmHg confirmée à deux reprises."},
+ {id:'s3',s:'cardio',d:2,status:'draft',src:'OMS — Maladies cardiovasculaires',q:"Les infarctus et les AVC représentent environ quelle part des décès cardiovasculaires ?",o:["25 %","50 %","85 %","100 %"],a:2,e:"Environ 85 % des décès cardiovasculaires sont dus aux infarctus et aux accidents vasculaires cérébraux."},
+ {id:'s4',s:'pneumo',d:2,status:'draft',src:'OMS — Asthme',q:"Dans l'asthme, quel type de traitement inhalé constitue le traitement de fond (controller) ?",o:["Un bronchodilatateur de courte durée","Un corticostéroïde inhalé","Un antibiotique inhalé","Un mucolytique"],a:1,e:"Les corticostéroïdes inhalés réduisent l'inflammation des voies aériennes : c'est le traitement de fond."},
+ {id:'s5',s:'pneumo',d:1,status:'draft',src:'OMS — Asthme',q:"Quel médicament soulage rapidement une crise d'asthme en dilatant les bronches (reliever) ?",o:["Béclométasone","Salbutamol","Amoxicilline","Paracétamol"],a:1,e:"Le salbutamol, bronchodilatateur, est un traitement de secours à action rapide."},
+ {id:'s6',s:'pneumo',d:2,status:'draft',src:'OMS — Tuberculose',q:"Quelle association constitue le traitement de première ligne de la tuberculose ?",o:["Amoxicilline + acide clavulanique","Rifampicine, isoniazide, pyrazinamide, éthambutol","Ceftriaxone + métronidazole","Azithromycine seule"],a:1,e:"La quadrithérapie antituberculeuse standard associe rifampicine, isoniazide, pyrazinamide et éthambutol."},
+ {id:'s7',s:'neuro',d:1,status:'draft',src:'OMS — Maladies cardiovasculaires',q:"Parmi ces affections, laquelle est une manifestation aiguë majeure des maladies cardiovasculaires ?",o:["L'accident vasculaire cérébral","La migraine","L'épilepsie","La sclérose en plaques"],a:0,e:"L'AVC est, avec l'infarctus, l'une des deux principales manifestations aiguës des maladies cardiovasculaires."},
+ {id:'s8',s:'endoc',d:1,status:'draft',src:'OMS — Diabète',q:"Comment l'OMS définit-elle le diabète ?",o:["Un excès de globules blancs","Un défaut de production ou d'utilisation de l'insuline","Une carence en fer","Une maladie de la thyroïde"],a:1,e:"Le diabète survient quand le pancréas ne produit pas assez d'insuline, ou que l'organisme ne l'utilise pas efficacement."},
+ {id:'s9',s:'endoc',d:2,status:'draft',src:'OMS — Diabète',q:"Quelle proportion des personnes diabétiques présente un diabète de type 2 (OMS) ?",o:["Environ 50 %","Environ 70 %","Plus de 95 %","Moins de 20 %"],a:2,e:"Plus de 95 % des personnes diabétiques ont un diabète de type 2."},
+ {id:'s10',s:'endoc',d:2,status:'draft',src:'OMS — Diabète',q:"Parmi les médicaments cités par l'OMS pour le diabète de type 2, lequel est le plus couramment utilisé en première intention ?",o:["Insuline d'emblée","Metformine","Corticoïdes","Antibiotiques"],a:1,e:"Avec les mesures hygiéno-diététiques, la metformine est le traitement médicamenteux de première intention le plus courant du diabète de type 2."},
+ {id:'s11',s:'nephro',d:2,status:'draft',src:'OMS — Diabète / Hypertension',q:"Quelles maladies chroniques sont des causes majeures d'atteinte rénale selon l'OMS ?",o:["Le diabète et l'hypertension","L'asthme et l'anémie","La migraine et l'arthrose","Les caries et la myopie"],a:0,e:"Le diabète et l'hypertension endommagent les reins et figurent parmi les grandes causes d'insuffisance rénale."},
+ {id:'s12',s:'infectio',d:2,status:'draft',src:'OMS — Sepsis',q:"Comment définit-on le sepsis ?",o:["Une simple fièvre","Une réponse immunitaire dérégulée à une infection, avec dysfonction d'organe","Une allergie médicamenteuse","Une carence vitaminique"],a:1,e:"Le sepsis est une réponse extrême et dérégulée de l'organisme à une infection, entraînant une dysfonction d'organe qui engage le pronostic vital."},
+ {id:'s13',s:'infectio',d:1,status:'draft',src:'OMS — Sepsis',q:"Le traitement du sepsis est d'autant plus efficace qu'il est :",o:["Retardé de 48 h","Débuté précocement","Uniquement chirurgical","Limité aux antipyrétiques"],a:1,e:"La précocité de la prise en charge du sepsis améliore nettement la survie."},
+ {id:'s14',s:'infectio',d:1,status:'draft',src:'OMS — Tuberculose',q:"Quel est le principal mode de transmission de la tuberculose ?",o:["Voie aérienne (gouttelettes lors de la toux)","Voie sexuelle","Piqûre de moustique","Eau contaminée"],a:0,e:"La tuberculose se transmet par voie aérienne, via les gouttelettes émises quand une personne atteinte tousse ou éternue."},
+ {id:'s15',s:'hemato',d:1,status:'draft',src:'OMS — Anémie',q:"Comment se définit l'anémie ?",o:["Un excès de plaquettes","Une baisse des globules rouges ou de l'hémoglobine sous la normale","Un excès de globules blancs","Une hyperglycémie"],a:1,e:"L'anémie est une baisse du nombre de globules rouges ou de la concentration en hémoglobine en dessous de la normale."},
+ {id:'s16',s:'hemato',d:1,status:'draft',src:'OMS — Anémie',q:"Quelle est la première cause nutritionnelle d'anémie dans le monde ?",o:["La carence en fer","La carence en vitamine C","L'excès de calcium","La carence en iode"],a:0,e:"La carence en fer est la première cause nutritionnelle d'anémie à l'échelle mondiale."},
+ {id:'s17',s:'hemato',d:2,status:'draft',src:'OMS — Anémie',q:"Quelles populations sont les plus à risque d'anémie selon l'OMS ?",o:["Les hommes adultes sportifs","Les enfants de moins de 5 ans et les femmes enceintes","Les personnes âgées uniquement","Aucune en particulier"],a:1,e:"Les enfants de moins de 5 ans, les adolescentes et femmes menstruées, et les femmes enceintes sont les plus vulnérables."},
+];
+// Banque personnalisée (contributions).
 let CUSTOM=loadCustom();
 function loadCustom(){try{const r=JSON.parse(localStorage.getItem('resihub_q'));if(Array.isArray(r))return r;}catch(e){}return [];}
 function saveCustom(){localStorage.setItem('resihub_q',JSON.stringify(CUSTOM));}
-function bank(){return QUESTIONS.concat(CUSTOM);}
+let onlyValid=false;
+function toggleOnlyValid(cb){onlyValid=cb.checked;}
+function bank(){return QUESTIONS.concat(SEED,CUSTOM);}
+function bankPlayable(){return onlyValid?bank().filter(q=>statusOf(q)==='validated'):bank();}
+function statusOf(q){return (st.valids&&st.valids[q.id])?'validated':(q.status||'demo');}
+function validatorOf(q){return (st.valids&&st.valids[q.id])||null;}
+function srcLine(q){
+  const stt=statusOf(q);
+  const badge=stt==='validated'
+    ?`<span style="color:var(--ok);font-weight:700">Validé${validatorOf(q)?' · '+validatorOf(q):''}</span>`
+    :`<span style="color:var(--accent-d);font-weight:700">Non validé — à vérifier</span>`;
+  return `<div style="font-size:11.5px;color:var(--muted);margin-top:9px;font-family:var(--mono)">${badge}${q.src?' · Source : '+q.src:''}</div>`;
+}
 const val=id=>{const el=document.getElementById(id);return el?el.value:'';};
 function toast(msg){const p=document.getElementById('xpPop');document.getElementById('xpPopTxt').textContent=msg;p.classList.remove('show');void p.offsetWidth;p.classList.add('show');}
 
@@ -439,7 +472,7 @@ const BADGES=[
 ];
 
 /* ── État ───────────────────────────────────────────── */
-const DEFAULT={xp:0,streak:0,lastDay:null,answered:0,correct:0,sessions:0,perfect:0,
+const DEFAULT={xp:0,streak:0,lastDay:null,answered:0,correct:0,sessions:0,perfect:0,valids:{},
   subj:Object.fromEntries(SUBJECTS.map(s=>[s.k,0])),week:[0,0,0,0,0,0,0]};
 let st=load();
 function load(){try{const r=JSON.parse(localStorage.getItem('resihub'));if(r)return Object.assign({},DEFAULT,r);}catch(e){}return JSON.parse(JSON.stringify(DEFAULT));}
@@ -503,7 +536,7 @@ function render(){
   else if(route==='sub')renderSub();
   else if(route==='quiz')renderQuiz();
 }
-const demoBanner=`<div class="demo-banner">${ic('info',17)}<div><b>Prototype — contenu de démonstration.</b> Les QCM ci-dessous illustrent le moteur ; ils ne sont pas validés pour la révision réelle.</div></div>`;
+const demoBanner=`<div class="demo-banner">${ic('info',17)}<div><b>Contenu à valider.</b> Chaque QCM affiche sa source et son statut. Rien n'est certifié tant qu'un médecin ne l'a pas marqué « validé » (onglet Contribuer).</div></div>`;
 
 /* ── Vue : Tableau de bord ──────────────────────────── */
 function renderDash(){
@@ -561,6 +594,10 @@ function renderProg(){
   app.innerHTML=`<div class="view">
     ${demoBanner}
     <div class="section-h" style="margin-top:0"><h2>Choisis une matière</h2><span class="num" style="font:700 13px var(--mono);color:var(--muted)">${bank().length} QCM disponibles</span></div>
+    <label style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);margin:-4px 0 16px;cursor:pointer;width:fit-content">
+      <input type="checkbox" ${onlyValid?'checked':''} onchange="toggleOnlyValid(this);renderProg()" style="width:16px;height:16px;accent-color:var(--primary)">
+      Réviser uniquement le contenu validé par un médecin (${bank().filter(q=>statusOf(q)==='validated').length})
+    </label>
     <div class="grid prog-grid">
       ${SUBJECTS.map(s=>{const p=st.subj[s.k]||0;const avail=bank().filter(q=>q.s===s.k).length;
         return `<div class="card pcard">
@@ -577,9 +614,9 @@ function renderProg(){
 /* ── Moteur QCM ─────────────────────────────────────── */
 let Q=null;
 function startQuiz(scope){
-  let pool=scope==='mix'?bank().slice():bank().filter(q=>q.s===scope);
+  let pool=scope==='mix'?bankPlayable().slice():bankPlayable().filter(q=>q.s===scope);
   pool=shuffle(pool.slice()).slice(0,scope==='mix'?5:Math.min(6,pool.length));
-  if(!pool.length){go('prog');return;}
+  if(!pool.length){toast(onlyValid?'Aucun QCM validé pour cette sélection.':'Aucun QCM disponible.');go('prog');return;}
   Q={pool,i:0,score:0,gained:0,scope,answered:false,t0:Date.now()};
   route='quiz';document.getElementById('topTitle').textContent='Session en cours';buildNav();renderQuiz();
 }
@@ -629,7 +666,7 @@ function answer(idx){
   const cur=st.subj[q.s]||0;st.subj[q.s]=Math.min(100,Math.round(cur+(good?4:1)));
   save();syncTop();
   document.getElementById('feedback').innerHTML=
-    `<div class="expl"><b>${good?'Bonne réponse.':'Réponse : '+['A','B','C','D','E'][correct]+'.'}</b> ${q.e}</div>`;
+    `<div class="expl"><b>${good?'Bonne réponse.':'Réponse : '+['A','B','C','D','E'][correct]+'.'}</b> ${q.e}${srcLine(q)}</div>`;
   document.getElementById('qa').innerHTML=
     `<button class="btn" onclick="nextQ()">${Q.i+1<Q.pool.length?'Question suivante':'Voir le résultat'} →</button>`;
 }
@@ -787,7 +824,9 @@ function renderExamIntro(){
   </div></div>`;
 }
 function startExam(){
-  E={pool:shuffle(bank().slice()).slice(0,EXAM_N),i:0,answers:Array(EXAM_N).fill(null),
+  const src=bankPlayable();
+  if(!src.length){toast('Aucun QCM validé disponible.');go('prog');return;}
+  E={pool:shuffle(src.slice()).slice(0,EXAM_N),i:0,answers:Array(EXAM_N).fill(null),
      deadline:Date.now()+EXAM_MIN*60*1000,sel:null};
   renderExam();
 }
@@ -863,7 +902,7 @@ function finishExam(timeout){
       <div class="rv-h"><b>${i+1}. ${q.q}</b>${tag}</div>
       ${a!==null&&!good?`<div class="rv-a">Ta réponse : <b>${q.o[a]}</b></div>`:''}
       <div class="rv-a">Bonne réponse : <b>${q.o[q.a]}</b></div>
-      <div class="rv-e">${q.e}</div>
+      <div class="rv-e">${q.e}${srcLine(q)}</div>
     </div>`;}).join('');
   E=null;
   app.innerHTML=`<div class="view"><div class="quiz">
@@ -897,6 +936,22 @@ function finishExam(timeout){
 /* ── Vue : Contribuer ───────────────────────────────── */
 function renderAdd(){
   const mine=CUSTOM.length;
+  const allq=bank();
+  const validatedC=allq.filter(q=>statusOf(q)==='validated');
+  const pendingC=allq.filter(q=>statusOf(q)!=='validated');
+  const vItems=pendingC.slice(0,80).map(q=>`
+        <div class="qitem">
+          <div class="qx"><small>${(SUBJ[q.s]||{}).name||q.s}${q.src?' · '+q.src:''}</small><br>${q.q}</div>
+          <button class="del" style="color:var(--ok)" title="Marquer validé" onclick="validateQ('${q.id}')">${ic('check2',18)}</button>
+        </div>`).join('');
+  const validationSection=`
+    <div class="card panel" style="margin-top:16px">
+      <div class="section-h" style="margin:0 0 4px"><h3 style="font-size:15px">File de validation — relecture médecin</h3>
+        <span class="num" style="font:700 12px var(--mono);color:var(--ok)">${validatedC.length} validé${validatedC.length>1?'s':''} / ${allq.length}</span></div>
+      <div class="sub">Un médecin coche « validé » après relecture. Seuls les QCM validés portent le badge de confiance et peuvent être isolés côté révision.</div>
+      <div class="fld" style="max-width:340px"><label>Nom du médecin validateur</label><input type="text" id="validName" placeholder="Dr Nom Prénom"></div>
+      <div class="qlist" style="margin-top:10px">${pendingC.length?vItems:'<div class="empty-b">Tout le contenu est validé.</div>'}</div>
+    </div>`;
   const subjOpts=SUBJECTS.map(s=>`<option value="${s.k}">${s.name}</option>`).join('');
   const list=mine?[...CUSTOM].reverse().map(x=>`
       <div class="qitem">
@@ -940,7 +995,14 @@ function renderAdd(){
         <div class="qlist" style="margin-top:8px">${list}</div>
       </div>
     </div>
+    ${validationSection}
   </div>`;
+}
+function validateQ(id){
+  const name=val('validName').trim();
+  if(!name){toast('Entre le nom du médecin validateur.');return;}
+  if(!st.valids)st.valids={};
+  st.valids[id]=name;save();toast('Validé par '+name);renderAdd();
 }
 function addQuestion(){
   const s=val('aSubj'),d=+val('aDiff')||1,q=val('aQ').trim(),e=val('aE').trim();
