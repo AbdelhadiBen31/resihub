@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "note": "CONTENU DE DÉMONSTRATION. Ces QCM illustrent le schéma de données et le moteur. Ils ne sont pas validés médicalement et ne doivent pas servir à la révision réelle. Le contenu définitif doit être rédigé et relu par des médecins.",
+    "schemaVersion": 1,
+    "locale": "fr"
+  },
+  "subjects": [
+    { "key": "cardio",   "name": "Cardiologie",           "icon": "heart",   "targetPool": 1240 },
+    { "key": "pneumo",   "name": "Pneumologie",           "icon": "lungs",   "targetPool": 980 },
+    { "key": "neuro",    "name": "Neurologie",            "icon": "brain",   "targetPool": 1120 },
+    { "key": "nephro",   "name": "Néphrologie",           "icon": "kidney",  "targetPool": 760 },
+    { "key": "gastro",   "name": "Gastro-entérologie",    "icon": "stomach", "targetPool": 1050 },
+    { "key": "endoc",    "name": "Endocrinologie",        "icon": "drop",    "targetPool": 840 },
+    { "key": "infectio", "name": "Infectiologie",         "icon": "bug",     "targetPool": 990 },
+    { "key": "hemato",   "name": "Hématologie",           "icon": "drop",    "targetPool": 720 }
+  ],
+  "questions": [
+    { "id": "c1", "subject": "cardio", "difficulty": 2, "question": "À la phase aiguë d'un infarctus du myocarde, quel signe ECG est le plus caractéristique ?", "options": ["Sus-décalage du segment ST", "Onde U proéminente", "Allongement du QT isolé", "Bloc de branche droit isolé"], "answer": 0, "explanation": "Le sus-décalage ST traduit la lésion transmurale aiguë (SCA ST+)." },
+    { "id": "c2", "subject": "cardio", "difficulty": 1, "question": "Quelle structure est le pacemaker physiologique du cœur ?", "options": ["Le nœud auriculo-ventriculaire", "Le nœud sinusal (sino-atrial)", "Le faisceau de His", "Les fibres de Purkinje"], "answer": 1, "explanation": "Le nœud sinusal impose le rythme (60–100/min au repos)." },
+    { "id": "c3", "subject": "cardio", "difficulty": 2, "question": "Premier geste devant un arrêt cardio-respiratoire chez l'adulte ?", "options": ["Injecter de l'adrénaline", "Débuter les compressions thoraciques", "Poser une voie veineuse", "Faire un ECG 12 dérivations"], "answer": 1, "explanation": "La réanimation cardio-pulmonaire (compressions) prime, avec alerte et défibrillation précoce." },
+    { "id": "p1", "subject": "pneumo", "difficulty": 2, "question": "Examen de référence pour confirmer une embolie pulmonaire ?", "options": ["Radiographie thoracique", "Angioscanner thoracique", "Spirométrie", "Échographie abdominale"], "answer": 1, "explanation": "L'angioscanner (angio-TDM) visualise directement le thrombus artériel pulmonaire." },
+    { "id": "p2", "subject": "pneumo", "difficulty": 1, "question": "Quel test évalue au mieux un trouble ventilatoire obstructif ?", "options": ["Le rapport VEMS/CVF", "La saturation seule", "La radiographie", "Le D-dimère"], "answer": 0, "explanation": "Un rapport VEMS/CVF abaissé (< 0,7) définit le syndrome obstructif." },
+    { "id": "p3", "subject": "pneumo", "difficulty": 2, "question": "Germe le plus fréquent de la pneumonie aiguë communautaire ?", "options": ["Mycoplasma pneumoniae", "Streptococcus pneumoniae", "Legionella pneumophila", "Klebsiella pneumoniae"], "answer": 1, "explanation": "Le pneumocoque reste le premier agent, y compris des formes graves." },
+    { "id": "n1", "subject": "neuro", "difficulty": 3, "question": "Chez un droitier, une aphasie avec hémiplégie droite oriente vers une atteinte de quel hémisphère ?", "options": ["Hémisphère droit", "Hémisphère gauche", "Cervelet", "Tronc cérébral bas"], "answer": 1, "explanation": "Le langage est majoritairement latéralisé à gauche chez le droitier." },
+    { "id": "n2", "subject": "neuro", "difficulty": 2, "question": "Délai indicatif classique pour la thrombolyse d'un AVC ischémique ?", "options": ["Jusqu'à 4h30", "Jusqu'à 24h systématiquement", "Au-delà de 48h", "Aucun délai"], "answer": 0, "explanation": "La fenêtre thérapeutique de la thrombolyse IV est classiquement ≤ 4h30 (sous conditions)." },
+    { "id": "np1", "subject": "nephro", "difficulty": 2, "question": "Première cause d'insuffisance rénale chronique dans le monde ?", "options": ["Les lithiases", "Le diabète", "Les infections urinaires", "Les AINS"], "answer": 1, "explanation": "La néphropathie diabétique est la première étiologie d'IRC terminale." },
+    { "id": "np2", "subject": "nephro", "difficulty": 1, "question": "Quel ion doit être surveillé en priorité dans l'insuffisance rénale aiguë ?", "options": ["Le calcium", "Le potassium", "Le magnésium", "Le chlore"], "answer": 1, "explanation": "L'hyperkaliémie est la menace vitale immédiate (troubles du rythme)." },
+    { "id": "g1", "subject": "gastro", "difficulty": 1, "question": "Quelle bactérie est associée à la maladie ulcéreuse gastro-duodénale ?", "options": ["Escherichia coli", "Helicobacter pylori", "Salmonella", "Clostridioides difficile"], "answer": 1, "explanation": "H. pylori est impliqué dans la majorité des ulcères non liés aux AINS." },
+    { "id": "g2", "subject": "gastro", "difficulty": 2, "question": "Signe d'alarme imposant une endoscopie devant une dyspepsie ?", "options": ["Ballonnement isolé", "Amaigrissement / dysphagie", "Éructations", "Pyrosis occasionnel"], "answer": 1, "explanation": "Les signes d'alarme (dysphagie, amaigrissement, anémie, hémorragie) imposent l'endoscopie." },
+    { "id": "e1", "subject": "endoc", "difficulty": 1, "question": "Quelle hormone fait défaut dans le diabète de type 1 ?", "options": ["Le glucagon", "L'insuline", "Le cortisol", "La TSH"], "answer": 1, "explanation": "Le DT1 résulte d'une carence en insuline par destruction des cellules bêta." },
+    { "id": "e2", "subject": "endoc", "difficulty": 2, "question": "Examen recommandé pour le suivi de l'équilibre glycémique au long cours ?", "options": ["Glycémie à jeun unique", "Hémoglobine glyquée (HbA1c)", "Bandelette urinaire", "Ionogramme"], "answer": 1, "explanation": "L'HbA1c reflète la glycémie moyenne des ~3 derniers mois." },
+    { "id": "i1", "subject": "infectio", "difficulty": 1, "question": "Antibiotique de première intention d'une angine à streptocoque A ?", "options": ["Amoxicilline", "Ciprofloxacine", "Vancomycine", "Métronidazole"], "answer": 0, "explanation": "L'amoxicilline (pénicilline) est le traitement de référence de l'angine à SGA." },
+    { "id": "i2", "subject": "infectio", "difficulty": 2, "question": "Quel élément définit un sepsis selon les concepts récents ?", "options": ["Fièvre isolée", "Dysfonction d'organe due à une infection", "Hyperleucocytose seule", "Tachycardie isolée"], "answer": 1, "explanation": "Le sepsis = infection + dysfonction d'organe (score SOFA)." },
+    { "id": "h1", "subject": "hemato", "difficulty": 1, "question": "Carence responsable de l'anémie microcytaire la plus fréquente ?", "options": ["Vitamine B12", "Fer", "Folates", "Vitamine C"], "answer": 1, "explanation": "La carence martiale (fer) donne une anémie microcytaire hypochrome." },
+    { "id": "h2", "subject": "hemato", "difficulty": 2, "question": "Quel bilan explore en première intention une anémie ?", "options": ["Numération + réticulocytes", "D-dimères", "Troponine", "Lipase"], "answer": 0, "explanation": "NFS et réticulocytes orientent entre anémie régénérative et arégénérative." }
+  ]
+}
