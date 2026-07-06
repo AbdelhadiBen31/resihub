@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "context": "Concours national de résidanat de médecine — Algérie (en français, 3e cycle / accès à la spécialité).",
+    "note": "Le programme officiel du résidanat est défini par les facultés de médecine et le ministère : c'est la source primaire à suivre. Les liens ci-dessous sont des ressources d'appoint, réelles et en accès libre. Aucun contenu n'est copié — ce sont des liens sortants à vérifier avant usage.",
+    "schemaVersion": 2
+  },
+  "categories": [
+    { "key": "ref", "name": "Bases & références" },
+    { "key": "guide", "name": "Recommandations & guidelines" },
+    { "key": "imaging", "name": "Imagerie & anatomie" },
+    { "key": "tools", "name": "Outils cliniques" },
+    { "key": "courses", "name": "Cours & vidéos" }
+  ],
+  "resources": [
+    { "cat": "ref", "name": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov", "access": "Gratuit", "desc": "Base bibliographique de référence en médecine (NIH/NCBI)." },
+    { "cat": "ref", "name": "StatPearls", "url": "https://www.statpearls.com", "access": "Gratuit", "desc": "Fiches de synthèse par pathologie, orientées révision (accès libre via NCBI)." },
+    { "cat": "ref", "name": "MSD Manual (version pro)", "url": "https://www.msdmanuals.com/fr-fr/professional", "access": "Gratuit", "desc": "Manuel médical professionnel complet, en français, gratuit." },
+    { "cat": "ref", "name": "NCBI Bookshelf", "url": "https://www.ncbi.nlm.nih.gov/books", "access": "Gratuit", "desc": "Manuels médicaux en accès libre." },
+    { "cat": "guide", "name": "Haute Autorité de Santé (HAS)", "url": "https://www.has-sante.fr", "access": "Gratuit", "desc": "Recommandations francophones de bonne pratique — utiles pour le raisonnement clinique." },
+    { "cat": "guide", "name": "Organisation mondiale de la Santé (OMS)", "url": "https://www.who.int/fr/publications", "access": "Gratuit", "desc": "Guidelines et publications internationales, en français." },
+    { "cat": "imaging", "name": "Radiopaedia", "url": "https://radiopaedia.org", "access": "Gratuit", "desc": "Référence collaborative d'imagerie médicale avec cas illustrés." },
+    { "cat": "imaging", "name": "OpenStax — Anatomie & Physiologie", "url": "https://openstax.org/subjects/science", "access": "Gratuit", "desc": "Manuel libre d'anatomie et physiologie, illustré." },
+    { "cat": "tools", "name": "MDCalc", "url": "https://www.mdcalc.com", "access": "Gratuit", "desc": "Scores et calculateurs cliniques validés (SOFA, CHA₂DS₂-VASc, etc.)." },
+    { "cat": "courses", "name": "Osmosis", "url": "https://www.osmosis.org", "access": "Freemium", "desc": "Vidéos pédagogiques par thème (partie gratuite)." },
+    { "cat": "courses", "name": "AMBOSS", "url": "https://www.amboss.com", "access": "Freemium", "desc": "Plateforme de révision médicale (fiches + QCM), essai gratuit." },
+    { "cat": "courses", "name": "Coursera — santé", "url": "https://www.coursera.org/browse/health", "access": "Audit gratuit", "desc": "Cours universitaires consultables gratuitement en mode audit." }
+  ]
+}

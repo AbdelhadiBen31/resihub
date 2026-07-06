@@ -228,6 +228,41 @@ h1,h2,h3{text-wrap:balance;line-height:1.15;letter-spacing:-.02em}
 .pay-note{display:flex;align-items:center;gap:8px;justify-content:center;color:var(--faint);font-size:12.5px;margin-top:16px}
 .pay-note svg{width:15px;height:15px}
 
+/* ── Ressources ───────────────────────────────────── */
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{padding:7px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--surface);
+  font-size:13px;font-weight:600;color:var(--muted);transition:all .15s}
+.pill:hover{border-color:var(--primary);color:var(--primary-d)}
+.pill.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.res-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.rcard{padding:18px;display:flex;flex-direction:column;gap:8px;transition:transform .14s,box-shadow .2s}
+.rcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.rcard .r-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.rcard h3{font-size:15.5px}
+.rcard p{font-size:13.5px;color:var(--muted);flex:1}
+.acc-badge{font:700 11px var(--mono);padding:4px 10px;border-radius:99px;white-space:nowrap;flex:none}
+.acc-free{background:var(--ok-t);color:var(--ok)}
+.acc-mix{background:var(--accent-t);color:var(--accent-d)}
+.rcard a{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:var(--primary);text-decoration:none;margin-top:2px}
+.rcard a svg{width:15px;height:15px}
+.rcard a:hover{color:var(--primary-d)}
+/* ── Examen blanc ─────────────────────────────────── */
+.exam-hero{padding:28px;border-top:3px solid var(--vital)}
+.exam-rules{display:flex;flex-direction:column;gap:10px;margin:18px 0 22px}
+.exam-rules li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;list-style:none}
+.exam-rules svg{width:19px;height:19px;color:var(--vital);flex:none;margin-top:1px}
+.timer.low{color:var(--vital);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.45}}
+.rev-item{padding:16px 18px;border-top:1px solid var(--line-2)}
+.rev-item .rv-h{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.rev-item .rv-h b{font-size:14px;flex:1}
+.rev-tag{font:700 11px var(--mono);padding:3px 9px;border-radius:99px;flex:none}
+.rev-ok{background:var(--ok-t);color:var(--ok)} .rev-no{background:var(--bad-t);color:var(--bad)}
+.rev-skip{background:var(--line-2);color:var(--muted)}
+.rev-item .rv-a{font-size:13.5px;color:var(--muted);margin:2px 0}
+.rev-item .rv-a b{color:var(--ink)}
+.rev-item .rv-e{font-size:13.5px;background:var(--line-2);border-left:3px solid var(--primary);
+  border-radius:8px;padding:10px 12px;margin-top:8px;color:var(--ink-soft)}
 @media(max-width:920px){
   .app{grid-template-columns:1fr}
   .side{position:fixed;left:0;top:0;z-index:40;transform:translateX(-100%);transition:transform .25s;width:236px}
@@ -319,6 +354,9 @@ const I = {
   lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',
   medal:'<circle cx="12" cy="14" r="6"/><path d="M9 8L7 2M15 8l2-6M12 12v4M10 14h4"/>',
   info:'<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/>',
+  clip:'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4a3 3 0 016 0M9 10h6M9 14h6M9 18h4"/>',
+  ext:'<path d="M14 4h6v6M20 4l-9 9M19 14v5a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h5"/>',
   play:'<path d="M6 4l14 8-14 8z"/>',
   shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>'
 };
@@ -394,6 +432,8 @@ let route='dash';
 const ROUTES=[
   {k:'dash',label:'Tableau de bord',icon:'dash',title:'Tableau de bord'},
   {k:'prog',label:'Programme',icon:'book',title:'Programme de révision'},
+  {k:'exam',label:'Examen blanc',icon:'clip',title:'Examen blanc'},
+  {k:'res',label:'Ressources',icon:'globe',title:'Ressources'},
   {k:'rank',label:'Classement',icon:'trophy',title:'Classement'},
   {k:'sub',label:'Abonnement',icon:'star',title:'Abonnement'},
 ];
@@ -402,7 +442,10 @@ function buildNav(){
     `<button data-r="${r.k}" class="${r.k===route?'on':''}">${ic(r.icon,19)}<span>${r.label}</span></button>`).join('');
   document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{go(b.dataset.r);closeSide();});
 }
-function go(r){route=r;const rt=ROUTES.find(x=>x.k===r);if(rt)document.getElementById('topTitle').textContent=rt.title;buildNav();render();window.scrollTo(0,0);}
+function go(r){
+  if(Q&&r!=='quiz'){stopTimer();Q=null;}
+  if(E&&r!=='exam'){stopTimer();E=null;}
+  route=r;const rt=ROUTES.find(x=>x.k===r);if(rt)document.getElementById('topTitle').textContent=rt.title;buildNav();render();window.scrollTo(0,0);}
 
 function syncTop(){
   const lvl=levelOf(st.xp);
@@ -420,6 +463,8 @@ function render(){
   syncTop();
   if(route==='dash')renderDash();
   else if(route==='prog')renderProg();
+  else if(route==='exam')(E?renderExam():renderExamIntro());
+  else if(route==='res')renderRes();
   else if(route==='rank')renderRank();
   else if(route==='sub')renderSub();
   else if(route==='quiz')renderQuiz();
@@ -445,6 +490,7 @@ function renderDash(){
       <p>Programme intensif, minuté et gamifié. Enchaîne les QCM, gagne de l'XP, garde ta série.</p>
       <div class="cta">
         <button class="btn amber" onclick="startQuiz('mix')">${ic('play',18,true)} Session express · 5 QCM</button>
+        <button class="btn ghost" style="color:#eaf6f6;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25)" onclick="go('exam')">${ic('clip',17)} Examen blanc</button>
         <button class="btn ghost" style="color:#eaf6f6;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25)" onclick="go('prog')">Choisir une matière</button>
       </div>
       <svg class="ekg" viewBox="0 0 340 120" aria-hidden="true"><path d="M0 70 H70 l10 -30 l12 60 l14 -78 l10 48 H160 l12 -18 l10 18 H340"/></svg>
@@ -642,6 +688,176 @@ function fakePay(plan){
   const p=document.getElementById('xpPop');document.getElementById('xpPopTxt').textContent=(plan==='annuel'?'Abonnement annuel':'Abonnement mensuel')+' — démo';
   p.querySelector('svg').outerHTML=ic('check2',20,false).replace('<svg','<svg style="color:var(--ok)"');
   p.classList.remove('show');void p.offsetWidth;p.classList.add('show');
+}
+
+/* ── Vue : Ressources ───────────────────────────────── */
+const RES_CATS=[
+ {k:'all',name:'Tout'},
+ {k:'ref',name:'Bases & références'},
+ {k:'guide',name:'Recommandations'},
+ {k:'imaging',name:'Imagerie & anatomie'},
+ {k:'tools',name:'Outils cliniques'},
+ {k:'courses',name:'Cours & vidéos'}];
+const RESOURCES=[
+ {cat:'ref',name:'PubMed',url:'https://pubmed.ncbi.nlm.nih.gov',access:'Gratuit',desc:'Base bibliographique de référence en médecine (NIH/NCBI).'},
+ {cat:'ref',name:'StatPearls',url:'https://www.statpearls.com',access:'Gratuit',desc:'Fiches de synthèse par pathologie, orientées révision (accès libre via NCBI).'},
+ {cat:'ref',name:'MSD Manual — version pro (FR)',url:'https://www.msdmanuals.com/fr/professional',access:'Gratuit',desc:'Manuel médical professionnel complet, en français.'},
+ {cat:'ref',name:'NCBI Bookshelf',url:'https://www.ncbi.nlm.nih.gov/books',access:'Gratuit',desc:'Manuels et ouvrages médicaux en accès libre.'},
+ {cat:'guide',name:'Haute Autorité de Santé (HAS)',url:'https://www.has-sante.fr',access:'Gratuit',desc:'Recommandations francophones de bonne pratique clinique.'},
+ {cat:'guide',name:'OMS — publications (FR)',url:'https://www.who.int/fr/publications',access:'Gratuit',desc:'Guidelines et rapports internationaux, en français.'},
+ {cat:'imaging',name:'Radiopaedia',url:'https://radiopaedia.org',access:'Gratuit',desc:'Référence collaborative d’imagerie médicale, cas illustrés.'},
+ {cat:'imaging',name:'OpenStax — Anatomie & Physiologie',url:'https://openstax.org/subjects/science',access:'Gratuit',desc:'Manuel libre d’anatomie-physiologie, très illustré.'},
+ {cat:'tools',name:'MDCalc',url:'https://www.mdcalc.com',access:'Gratuit',desc:'Scores et calculateurs cliniques validés (SOFA, CHA₂DS₂-VASc…).'},
+ {cat:'courses',name:'Osmosis',url:'https://www.osmosis.org',access:'Freemium',desc:'Vidéos pédagogiques par thème (partie gratuite).'},
+ {cat:'courses',name:'AMBOSS',url:'https://www.amboss.com',access:'Freemium',desc:'Fiches + QCM de révision médicale, essai gratuit.'},
+ {cat:'courses',name:'Coursera — santé',url:'https://www.coursera.org/browse/health',access:'Audit gratuit',desc:'Cours universitaires consultables gratuitement en mode audit.'}];
+let resFilter='all';
+function setResFilter(k){resFilter=k;renderRes();}
+function renderRes(){
+  const list=resFilter==='all'?RESOURCES:RESOURCES.filter(r=>r.cat===resFilter);
+  app.innerHTML=`<div class="view">
+    <div class="section-h" style="margin-top:0"><h2>Bibliothèque de ressources</h2>
+      <span class="num" style="font:700 13px var(--mono);color:var(--muted)">${list.length} ressource${list.length>1?'s':''}</span></div>
+    <p style="color:var(--muted);font-size:13.5px;max-width:68ch;margin-bottom:16px">
+      Sélection de références réelles, en accès libre, pour compléter tes révisions.
+      Le programme officiel du résidanat (facultés / ministère) reste ta source principale.</p>
+    <div class="pill-row">${RES_CATS.map(c=>`<button class="pill ${resFilter===c.k?'on':''}" onclick="setResFilter('${c.k}')">${c.name}</button>`).join('')}</div>
+    <div class="grid res-grid">
+      ${list.map(r=>`<div class="card rcard">
+        <div class="r-top"><h3>${r.name}</h3><span class="acc-badge ${r.access==='Gratuit'?'acc-free':'acc-mix'}">${r.access}</span></div>
+        <p>${r.desc}</p>
+        <a href="${r.url}" target="_blank" rel="noopener noreferrer">Ouvrir la ressource ${ic('ext',15)}</a>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+/* ── Examen blanc ───────────────────────────────────── */
+let E=null;
+const EXAM_N=10, EXAM_MIN=10;
+function renderExamIntro(){
+  app.innerHTML=`<div class="view"><div class="quiz">
+    ${demoBanner}
+    <div class="card exam-hero">
+      <span class="q-tag" style="background:var(--vital-t);color:var(--vital)">${ic('clip',14)} Conditions concours</span>
+      <h2 style="font-size:22px;margin:14px 0 4px">Examen blanc chronométré</h2>
+      <p style="color:var(--muted);font-size:14px">Comme le jour J : tu réponds à tout, la correction n’arrive qu’à la fin.</p>
+      <ul class="exam-rules">
+        <li>${ic('clock',19)}<span><b>${EXAM_MIN} minutes</b> pour <b>${EXAM_N} questions</b> — le temps écoulé, l’épreuve se termine seule.</span></li>
+        <li>${ic('shield',19)}<span><b>Aucune correction pendant l’épreuve.</b> Tu peux passer une question, mais pas revenir en arrière.</span></li>
+        <li>${ic('bolt',19)}<span><b>+4 XP par bonne réponse</b>, bonus <b>+20 XP</b> si tu dépasses 80 % de réussite.</span></li>
+        <li>${ic('target',19)}<span>Correction complète à la fin : ta réponse, la bonne réponse, l’explication.</span></li>
+      </ul>
+      <button class="btn amber" onclick="startExam()">${ic('play',18,true)} Lancer l’examen blanc</button>
+    </div>
+  </div></div>`;
+}
+function startExam(){
+  E={pool:shuffle(QUESTIONS.slice()).slice(0,EXAM_N),i:0,answers:Array(EXAM_N).fill(null),
+     deadline:Date.now()+EXAM_MIN*60*1000,sel:null};
+  renderExam();
+}
+function renderExam(){
+  if(!E){renderExamIntro();return;}
+  const q=E.pool[E.i],n=E.pool.length,sj=SUBJ[q.s],keys=['A','B','C','D','E'];
+  app.innerHTML=`<div class="view"><div class="quiz">
+    <div class="quiz-top">
+      <span class="count num">${E.i+1} / ${n}</span>
+      <div class="prog"><i style="width:${E.i/n*100}%"></i></div>
+      <span class="timer" id="exT">${ic('clock',16)}<span id="exTk" class="num">--:--</span></span>
+    </div>
+    <div class="card q-card">
+      <span class="q-tag">${ic(sj.icon,14)} ${sj.name}</span>
+      <div class="q-text">${q.q}</div>
+      <div class="opts" id="opts">
+        ${q.o.map((o,idx)=>`<button class="opt" data-i="${idx}" onclick="examSel(${idx})"><span class="key">${keys[idx]}</span><span>${o}</span></button>`).join('')}
+      </div>
+      <div class="q-actions">
+        <button class="btn ghost" onclick="examNext(true)">Passer</button>
+        <button class="btn" id="exNext" onclick="examNext(false)" disabled style="opacity:.5">${E.i+1<n?'Valider et continuer':'Terminer l’épreuve'} →</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:14px"><button class="btn ghost" style="padding:8px 14px" onclick="quitExam()">Abandonner</button></div>
+  </div></div>`;
+  E.sel=null;startExamTimer();
+}
+function examSel(idx){
+  if(!E)return;E.sel=idx;
+  document.querySelectorAll('#opts .opt').forEach(b=>b.classList.toggle('sel',+b.dataset.i===idx));
+  const nx=document.getElementById('exNext');nx.disabled=false;nx.style.opacity='1';
+}
+function examNext(skip){
+  if(!E)return;
+  if(!skip&&E.sel===null)return;
+  E.answers[E.i]=skip?null:E.sel;
+  if(E.i+1<E.pool.length){E.i++;renderExam();}else finishExam();
+}
+function startExamTimer(){
+  stopTimer();
+  const tick=()=>{
+    if(!E)return stopTimer();
+    const el=document.getElementById('exTk');if(!el)return;
+    const left=Math.max(0,E.deadline-Date.now()),s=Math.ceil(left/1000);
+    el.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+    if(s<=60)document.getElementById('exT').classList.add('low');
+    if(left<=0){finishExam(true);}
+  };
+  tick();timer=setInterval(tick,500);
+}
+function quitExam(){stopTimer();E=null;go('dash');}
+function finishExam(timeout){
+  stopTimer();
+  const pool=E.pool,ans=E.answers;
+  if(E.sel!==null&&ans[E.i]===null)ans[E.i]=E.sel; // réponse en cours au moment du gong
+  let sc=0;
+  pool.forEach((q,i)=>{
+    const a=ans[i],good=a===q.a;
+    if(good)sc++;
+    st.answered++;if(good)st.correct++;
+    const cur=st.subj[q.s]||0;st.subj[q.s]=Math.min(100,Math.round(cur+(good?4:1)));
+  });
+  const n=pool.length,pct=Math.round(sc/n*100);
+  const gain=sc*4+(pct>=80?20:0);
+  st.xp+=gain;st.sessions++;if(sc===n)st.perfect++;
+  const wd=(new Date().getDay()+6)%7;st.week[wd]=(st.week[wd]||0)+n;
+  touchDay();save();syncTop();if(gain)popXp(gain);
+  const C=2*Math.PI*66,off=C*(1-sc/n);
+  const review=pool.map((q,i)=>{
+    const a=ans[i],good=a===q.a;
+    const tag=a===null?'<span class="rev-tag rev-skip">Passée</span>':good?'<span class="rev-tag rev-ok">Juste</span>':'<span class="rev-tag rev-no">Faux</span>';
+    return `<div class="rev-item">
+      <div class="rv-h"><b>${i+1}. ${q.q}</b>${tag}</div>
+      ${a!==null&&!good?`<div class="rv-a">Ta réponse : <b>${q.o[a]}</b></div>`:''}
+      <div class="rv-a">Bonne réponse : <b>${q.o[q.a]}</b></div>
+      <div class="rv-e">${q.e}</div>
+    </div>`;}).join('');
+  E=null;
+  app.innerHTML=`<div class="view"><div class="quiz">
+    <div class="card result" style="max-width:none">
+      ${timeout?'<div class="demo-banner" style="margin-bottom:18px">'+ic('clock',17)+'<div><b>Temps écoulé.</b> L’épreuve a été rendue automatiquement.</div></div>':''}
+      <svg class="score-ring" viewBox="0 0 150 150">
+        <circle cx="75" cy="75" r="66" fill="none" stroke="var(--line)" stroke-width="11"/>
+        <circle cx="75" cy="75" r="66" fill="none" stroke="${pct>=60?'var(--ok)':'var(--vital)'}" stroke-width="11"
+          stroke-linecap="round" transform="rotate(-90 75 75)" stroke-dasharray="${C}" stroke-dashoffset="${C}" id="scArc"/>
+        <text x="75" y="70" text-anchor="middle" font-size="30" font-weight="800" fill="var(--ink)" class="num">${sc}/${n}</text>
+        <text x="75" y="94" text-anchor="middle" font-size="12" fill="var(--muted)" class="num">${pct}%</text>
+      </svg>
+      <h2>Examen blanc terminé</h2>
+      <div class="r-sub">${pct>=80?'Niveau concours. Continue sur cette lancée.':pct>=50?'Solide — vise les 80 % au prochain essai.':'La correction ci-dessous est ta meilleure alliée : lis chaque explication.'}</div>
+      <div class="r-stats">
+        <div class="r-stat"><div class="v num" style="color:var(--accent-d)">+${gain}</div><div class="l">XP gagnés</div></div>
+        <div class="r-stat"><div class="v num">${pct}%</div><div class="l">Réussite</div></div>
+        <div class="r-stat"><div class="v num">${n-sc}</div><div class="l">À revoir</div></div>
+      </div>
+      <div class="r-actions">
+        <button class="btn" onclick="go('exam')">${ic('play',16,true)} Refaire un examen</button>
+        <button class="btn ghost" onclick="go('dash')">Tableau de bord</button>
+      </div>
+    </div>
+    <div class="section-h"><h2>Correction détaillée</h2></div>
+    <div class="card lb">${review}</div>
+  </div></div>`;
+  requestAnimationFrame(()=>{const a=document.getElementById('scArc');if(a){a.style.transition='stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)';a.style.strokeDashoffset=off;}});
 }
 
 /* ── Menu mobile ────────────────────────────────────── */
