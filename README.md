@@ -61,6 +61,20 @@ npm run dev                     # http://localhost:8080
 2. **Licences** de banques existantes auprès d'éditeurs / facultés partenaires.
 3. **Génération assistée + relecture experte obligatoire** (jamais publié sans validation médicale).
 4. **Contributions** encadrées d'enseignants, avec workflow de revue.
+5. **Import de banques ouvertes existantes** (voir ci-dessous) — le chemin le plus rapide vers le volume.
+
+### Importer une banque existante (aller vers le volume)
+Des datasets de QCM médicaux existent déjà en grand nombre, en accès ouvert :
+- **MedQA** (licence MIT) — https://github.com/jind11/MedQA
+- **MedMCQA** (~194k QCM ; licence à vérifier) — https://huggingface.co/datasets/openlifescienceai/medmcqa
+
+Le convertisseur les transforme au format RésiHub :
+```bash
+python tools/import_dataset.py chemin/medmcqa.jsonl -o data/questions.imported.json --limit 2000
+```
+Puis dans l'app : onglet **Contribuer → Importer → Fichier JSON**.
+
+**Avant tout usage réel :** (1) vérifier la **licence** (usage commercial), (2) ces QCM sont en **anglais** et calibrés pour d'autres concours → **traduire + réaligner** sur le programme algérien, (3) ils entrent en `draft` → **relecture médecin obligatoire**. Ne commite pas un dataset redistribué sur un dépôt public sans licence adaptée.
 
 ## Roadmap
 Voir [`docs/ROADMAP.md`](docs/ROADMAP.md).

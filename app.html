@@ -445,7 +445,7 @@ const SEED=[
 // Banque personnalisée (contributions).
 let CUSTOM=loadCustom();
 function loadCustom(){try{const r=JSON.parse(localStorage.getItem('resihub_q'));if(Array.isArray(r))return r;}catch(e){}return [];}
-function saveCustom(){localStorage.setItem('resihub_q',JSON.stringify(CUSTOM));}
+function saveCustom(){try{localStorage.setItem('resihub_q',JSON.stringify(CUSTOM));return true;}catch(e){return false;}}
 let onlyValid=false;
 function toggleOnlyValid(cb){onlyValid=cb.checked;}
 function bank(){return QUESTIONS.concat(SEED,CUSTOM);}
@@ -989,8 +989,11 @@ function renderAdd(){
           <button class="btn ghost" style="flex:1;padding:9px" onclick="toggleImport()">${ic('up',16)} Importer</button>
         </div>
         <div id="importBox" style="display:none;margin-bottom:8px">
-          <div class="fld"><textarea id="aImport" placeholder='Colle ici un JSON : [ { "s":"cardio", "d":2, "q":"…", "o":["…","…"], "a":0, "e":"…" } ]'></textarea></div>
-          <button class="btn" style="padding:9px" onclick="doImport()">Importer le JSON</button>
+          <div class="fld" style="margin-bottom:10px"><label>Fichier JSON (sortie du convertisseur tools/import_dataset.py)</label>
+            <input type="file" id="aFile" accept="application/json,.json" onchange="importFile(this)"></div>
+          <div class="fld"><label>… ou colle un JSON</label><textarea id="aImport" placeholder='[ { "s":"cardio", "d":2, "q":"…", "o":["…","…"], "a":0, "e":"…" } ]'></textarea></div>
+          <button class="btn" style="padding:9px" onclick="doImport()">Importer le JSON collé</button>
+          <div class="hint" style="margin-top:8px">Le stockage local convient à quelques milliers de QCM. Pour de gros volumes (dizaines de milliers), il faut un backend.</div>
         </div>
         <div class="qlist" style="margin-top:8px">${list}</div>
       </div>
@@ -1028,20 +1031,24 @@ function exportBank(){
   document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
   toast(CUSTOM.length+' QCM exporté'+(CUSTOM.length>1?'s':''));
 }
-function doImport(){
-  const raw=val('aImport').trim();if(!raw){toast('Colle du JSON à importer.');return;}
+function importRaw(raw){
+  raw=(raw||'').trim();if(!raw){toast('Rien à importer.');return;}
   let arr;try{const p=JSON.parse(raw);arr=Array.isArray(p)?p:p.questions;}catch(e){toast('JSON invalide.');return;}
   if(!Array.isArray(arr)){toast('Format attendu : un tableau de questions.');return;}
   let n=0;
   arr.forEach(x=>{
     if(x&&x.q&&Array.isArray(x.o)&&x.o.length>=2&&typeof x.a==='number'&&x.o[x.a]){
-      CUSTOM.push({id:x.id||('u'+Date.now()+Math.floor(Math.random()*1e4)),s:SUBJ[x.s]?x.s:'cardio',d:+x.d||1,q:String(x.q),o:x.o.map(String),a:x.a,e:x.e?String(x.e):'—',mine:true});
+      CUSTOM.push({id:x.id||('u'+Date.now()+Math.floor(Math.random()*1e6)),s:SUBJ[x.s]?x.s:(x.s||'divers'),d:+x.d||2,q:String(x.q),o:x.o.map(String),a:x.a,e:x.e?String(x.e):'—',src:x.src||'Import',status:x.status||'draft',mine:true});
       n++;
     }
   });
   if(!n){toast('Aucune question valide trouvée.');return;}
-  saveCustom();toast(n+' QCM importé'+(n>1?'s':''));renderAdd();
+  if(saveCustom())toast(n+' QCM importé'+(n>1?'s':''));
+  else toast('Importé, mais trop volumineux pour le stockage local — passe par un backend.');
+  renderAdd();
 }
+function doImport(){importRaw(val('aImport'));}
+function importFile(input){const f=input.files&&input.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>importRaw(String(rd.result));rd.onerror=()=>toast('Fichier illisible.');rd.readAsText(f);}
 
 /* ── Menu mobile ────────────────────────────────────── */
 const side=document.getElementById('side'),scrim=document.getElementById('scrim');
