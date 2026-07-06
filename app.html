@@ -263,6 +263,25 @@ h1,h2,h3{text-wrap:balance;line-height:1.15;letter-spacing:-.02em}
 .rev-item .rv-a b{color:var(--ink)}
 .rev-item .rv-e{font-size:13.5px;background:var(--line-2);border-left:3px solid var(--primary);
   border-radius:8px;padding:10px 12px;margin-top:8px;color:var(--ink-soft)}
+/* ── Contribuer (formulaire) ──────────────────────── */
+.form-grid{display:flex;flex-direction:column;gap:14px}
+.fld label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:6px}
+.fld input[type=text],.fld textarea,.fld select{width:100%;font-family:inherit;font-size:14px;color:var(--ink);
+  background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;transition:border-color .15s}
+.fld input[type=text]:focus,.fld textarea:focus,.fld select:focus{border-color:var(--primary);outline:none}
+.fld textarea{resize:vertical;min-height:60px;line-height:1.5}
+.opt-in{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.opt-in input[type=radio]{width:18px;height:18px;accent-color:var(--primary);flex:none}
+.opt-in input[type=text]{flex:1}
+.row2{display:flex;gap:12px}.row2>*{flex:1}
+.hint{font-size:12px;color:var(--faint);margin-top:-4px}
+.qitem{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line-2)}
+.qitem:first-of-type{border-top:none}
+.qitem .qx{flex:1;font-size:13.5px;line-height:1.4}
+.qitem .qx small{color:var(--faint);font-weight:700;font-family:var(--mono);text-transform:uppercase;font-size:10.5px;letter-spacing:.05em}
+.qitem .del{color:var(--bad);flex:none;padding:3px}
+.qitem .del svg{width:17px;height:17px}
+.empty-b{text-align:center;color:var(--faint);font-size:13px;padding:20px 0}
 @media(max-width:920px){
   .app{grid-template-columns:1fr}
   .side{position:fixed;left:0;top:0;z-index:40;transform:translateX(-100%);transition:transform .25s;width:236px}
@@ -357,6 +376,11 @@ const I = {
   globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/>',
   clip:'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4a3 3 0 016 0M9 10h6M9 14h6M9 18h4"/>',
   ext:'<path d="M14 4h6v6M20 4l-9 9M19 14v5a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h5"/>',
+  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  dl:'<path d="M12 3v13M7 11l5 5 5-5M5 21h14"/>',
+  up:'<path d="M12 21V8M7 13l5-5 5 5M5 3h14"/>',
+  trash:'<path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M6 7l1 13a1 1 0 001 1h8a1 1 0 001-1l1-13"/>',
   play:'<path d="M6 4l14 8-14 8z"/>',
   shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>'
 };
@@ -397,6 +421,14 @@ const QUESTIONS = [
  {id:'h2',s:'hemato',d:2,q:"Quel bilan explore en première intention une anémie ?",o:["Numération + réticulocytes","D-dimères","Troponine","Lipase"],a:0,e:"NFS et réticulocytes orientent entre anémie régénérative et arégénérative."},
 ];
 
+// Banque personnalisée (contributions), fusionnée avec la démo et jouable partout.
+let CUSTOM=loadCustom();
+function loadCustom(){try{const r=JSON.parse(localStorage.getItem('resihub_q'));if(Array.isArray(r))return r;}catch(e){}return [];}
+function saveCustom(){localStorage.setItem('resihub_q',JSON.stringify(CUSTOM));}
+function bank(){return QUESTIONS.concat(CUSTOM);}
+const val=id=>{const el=document.getElementById(id);return el?el.value:'';};
+function toast(msg){const p=document.getElementById('xpPop');document.getElementById('xpPopTxt').textContent=msg;p.classList.remove('show');void p.offsetWidth;p.classList.add('show');}
+
 const BADGES=[
  {k:'first',name:'Première session',icon:'play',test:st=>st.sessions>=1},
  {k:'perfect',name:'Sans-faute',icon:'shield',test:st=>st.perfect>=1},
@@ -434,6 +466,7 @@ const ROUTES=[
   {k:'prog',label:'Programme',icon:'book',title:'Programme de révision'},
   {k:'exam',label:'Examen blanc',icon:'clip',title:'Examen blanc'},
   {k:'res',label:'Ressources',icon:'globe',title:'Ressources'},
+  {k:'add',label:'Contribuer',icon:'edit',title:'Enrichir la banque de QCM'},
   {k:'rank',label:'Classement',icon:'trophy',title:'Classement'},
   {k:'sub',label:'Abonnement',icon:'star',title:'Abonnement'},
 ];
@@ -465,6 +498,7 @@ function render(){
   else if(route==='prog')renderProg();
   else if(route==='exam')(E?renderExam():renderExamIntro());
   else if(route==='res')renderRes();
+  else if(route==='add')renderAdd();
   else if(route==='rank')renderRank();
   else if(route==='sub')renderSub();
   else if(route==='quiz')renderQuiz();
@@ -526,15 +560,15 @@ function renderDash(){
 function renderProg(){
   app.innerHTML=`<div class="view">
     ${demoBanner}
-    <div class="section-h" style="margin-top:0"><h2>Choisis une matière</h2><span class="num" style="font:700 13px var(--mono);color:var(--muted)">${QUESTIONS.length} QCM démo</span></div>
+    <div class="section-h" style="margin-top:0"><h2>Choisis une matière</h2><span class="num" style="font:700 13px var(--mono);color:var(--muted)">${bank().length} QCM disponibles</span></div>
     <div class="grid prog-grid">
-      ${SUBJECTS.map(s=>{const p=st.subj[s.k]||0;const avail=QUESTIONS.filter(q=>q.s===s.k).length;
+      ${SUBJECTS.map(s=>{const p=st.subj[s.k]||0;const avail=bank().filter(q=>q.s===s.k).length;
         return `<div class="card pcard">
           <div class="top-r"><span class="ic">${ic(s.icon,24)}</span><div><h3>${s.name}</h3><span class="meta">${s.pool.toLocaleString('fr-FR')} QCM · objectif</span></div></div>
           <div class="bar"><i style="width:${p}%"></i></div>
           <div class="foot"><span class="p num">${p}% maîtrisé</span>
           <button class="btn" style="padding:8px 14px" onclick="startQuiz('${s.k}')">${ic('play',16,true)} Réviser</button></div>
-          <div style="font:600 11px var(--mono);color:var(--faint)">${avail} QCM de démo disponibles</div>
+          <div style="font:600 11px var(--mono);color:var(--faint)">${avail} QCM disponible${avail>1?'s':''}</div>
         </div>`}).join('')}
     </div>
   </div>`;
@@ -543,7 +577,7 @@ function renderProg(){
 /* ── Moteur QCM ─────────────────────────────────────── */
 let Q=null;
 function startQuiz(scope){
-  let pool=scope==='mix'?QUESTIONS.slice():QUESTIONS.filter(q=>q.s===scope);
+  let pool=scope==='mix'?bank().slice():bank().filter(q=>q.s===scope);
   pool=shuffle(pool.slice()).slice(0,scope==='mix'?5:Math.min(6,pool.length));
   if(!pool.length){go('prog');return;}
   Q={pool,i:0,score:0,gained:0,scope,answered:false,t0:Date.now()};
@@ -753,7 +787,7 @@ function renderExamIntro(){
   </div></div>`;
 }
 function startExam(){
-  E={pool:shuffle(QUESTIONS.slice()).slice(0,EXAM_N),i:0,answers:Array(EXAM_N).fill(null),
+  E={pool:shuffle(bank().slice()).slice(0,EXAM_N),i:0,answers:Array(EXAM_N).fill(null),
      deadline:Date.now()+EXAM_MIN*60*1000,sel:null};
   renderExam();
 }
@@ -858,6 +892,93 @@ function finishExam(timeout){
     <div class="card lb">${review}</div>
   </div></div>`;
   requestAnimationFrame(()=>{const a=document.getElementById('scArc');if(a){a.style.transition='stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)';a.style.strokeDashoffset=off;}});
+}
+
+/* ── Vue : Contribuer ───────────────────────────────── */
+function renderAdd(){
+  const mine=CUSTOM.length;
+  const subjOpts=SUBJECTS.map(s=>`<option value="${s.k}">${s.name}</option>`).join('');
+  const list=mine?[...CUSTOM].reverse().map(x=>`
+      <div class="qitem">
+        <div class="qx"><small>${(SUBJ[x.s]||{}).name||x.s} · niv ${x.d}</small><br>${x.q}</div>
+        <button class="del" title="Supprimer" onclick="delQuestion('${x.id}')">${ic('trash',17)}</button>
+      </div>`).join(''):`<div class="empty-b">Aucun QCM ajouté pour l'instant.<br>Crée le premier avec le formulaire.</div>`;
+  app.innerHTML=`<div class="view">
+    ${demoBanner}
+    <div class="section-h" style="margin-top:0"><h2>Enrichir la banque de QCM</h2>
+      <span class="num" style="font:700 13px var(--mono);color:var(--muted)">${mine} ajouté${mine>1?'s':''} · ${bank().length} au total</span></div>
+    <p style="color:var(--muted);font-size:13.5px;max-width:70ch;margin-bottom:18px">
+      Ajoute tes propres questions : elles deviennent <b>jouables immédiatement</b> dans les sessions et les examens blancs.
+      Exporte le fichier pour le partager ou l'intégrer au dépôt. <b>Fais toujours relire le contenu médical par un médecin</b> avant diffusion réelle.</p>
+    <div class="grid two" style="align-items:start">
+      <div class="card panel">
+        <h3>Nouveau QCM</h3><div class="sub">Choisis la matière, écris l'énoncé et coche la bonne réponse.</div>
+        <div class="form-grid">
+          <div class="row2">
+            <div class="fld"><label>Matière</label><select id="aSubj">${subjOpts}</select></div>
+            <div class="fld"><label>Difficulté</label><select id="aDiff"><option value="1">1 — Facile</option><option value="2" selected>2 — Moyen</option><option value="3">3 — Difficile</option></select></div>
+          </div>
+          <div class="fld"><label>Énoncé de la question</label><textarea id="aQ" placeholder="Ex : Quel est l'examen de référence pour…"></textarea></div>
+          <div class="fld"><label>Réponses (coche la bonne)</label>
+            ${[0,1,2,3].map(i=>`<div class="opt-in"><input type="radio" name="acorrect" value="${i}" ${i===0?'checked':''} aria-label="Bonne réponse ${i+1}"><input type="text" id="aO${i}" placeholder="Réponse ${'ABCD'[i]}${i<2?' (obligatoire)':' (facultatif)'}"></div>`).join('')}
+            <div class="hint">Au moins 2 réponses. La réponse cochée doit être remplie.</div>
+          </div>
+          <div class="fld"><label>Explication (recommandée)</label><textarea id="aE" placeholder="Pourquoi cette réponse est correcte — la valeur pédagogique de RésiHub."></textarea></div>
+          <button class="btn wide" onclick="addQuestion()">${ic('plus',18)} Ajouter à la banque</button>
+        </div>
+      </div>
+      <div class="card panel">
+        <h3>Ma banque</h3><div class="sub">Partage-la ou réimporte-la sur un autre appareil.</div>
+        <div style="display:flex;gap:10px;margin-bottom:6px">
+          <button class="btn ghost" style="flex:1;padding:9px" onclick="exportBank()">${ic('dl',16)} Exporter</button>
+          <button class="btn ghost" style="flex:1;padding:9px" onclick="toggleImport()">${ic('up',16)} Importer</button>
+        </div>
+        <div id="importBox" style="display:none;margin-bottom:8px">
+          <div class="fld"><textarea id="aImport" placeholder='Colle ici un JSON : [ { "s":"cardio", "d":2, "q":"…", "o":["…","…"], "a":0, "e":"…" } ]'></textarea></div>
+          <button class="btn" style="padding:9px" onclick="doImport()">Importer le JSON</button>
+        </div>
+        <div class="qlist" style="margin-top:8px">${list}</div>
+      </div>
+    </div>
+  </div>`;
+}
+function addQuestion(){
+  const s=val('aSubj'),d=+val('aDiff')||1,q=val('aQ').trim(),e=val('aE').trim();
+  const raw=[0,1,2,3].map(i=>val('aO'+i).trim());
+  const sel=document.querySelector('input[name=acorrect]:checked');
+  if(!q){toast("Écris l'énoncé de la question.");return;}
+  if(raw.filter(x=>x).length<2){toast('Il faut au moins 2 réponses.');return;}
+  if(!sel){toast('Coche la bonne réponse.');return;}
+  const selIdx=+sel.value;
+  if(!raw[selIdx]){toast('La réponse cochée est vide.');return;}
+  const opts=[];let answer=0;
+  raw.forEach((x,i)=>{if(x){if(i===selIdx)answer=opts.length;opts.push(x);}});
+  CUSTOM.push({id:'u'+Date.now()+Math.floor(Math.random()*1000),s,d,q,o:opts,a:answer,e:e||'—',mine:true});
+  saveCustom();toast('QCM ajouté ✓');renderAdd();
+}
+function delQuestion(id){CUSTOM=CUSTOM.filter(x=>x.id!==id);saveCustom();renderAdd();}
+function toggleImport(){const b=document.getElementById('importBox');b.style.display=b.style.display==='none'?'block':'none';}
+function exportBank(){
+  if(!CUSTOM.length){toast('Ta banque est vide.');return;}
+  const data={meta:{note:'QCM RésiHub — à faire relire par un médecin avant usage réel.',count:CUSTOM.length},questions:CUSTOM};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='resihub-questions.json';
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+  toast(CUSTOM.length+' QCM exporté'+(CUSTOM.length>1?'s':''));
+}
+function doImport(){
+  const raw=val('aImport').trim();if(!raw){toast('Colle du JSON à importer.');return;}
+  let arr;try{const p=JSON.parse(raw);arr=Array.isArray(p)?p:p.questions;}catch(e){toast('JSON invalide.');return;}
+  if(!Array.isArray(arr)){toast('Format attendu : un tableau de questions.');return;}
+  let n=0;
+  arr.forEach(x=>{
+    if(x&&x.q&&Array.isArray(x.o)&&x.o.length>=2&&typeof x.a==='number'&&x.o[x.a]){
+      CUSTOM.push({id:x.id||('u'+Date.now()+Math.floor(Math.random()*1e4)),s:SUBJ[x.s]?x.s:'cardio',d:+x.d||1,q:String(x.q),o:x.o.map(String),a:x.a,e:x.e?String(x.e):'—',mine:true});
+      n++;
+    }
+  });
+  if(!n){toast('Aucune question valide trouvée.');return;}
+  saveCustom();toast(n+' QCM importé'+(n>1?'s':''));renderAdd();
 }
 
 /* ── Menu mobile ────────────────────────────────────── */
